@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-88">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proxy Oman • 1 clic = 1 proxy</title>
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Reset et styles de base */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(145deg, #0a1420 0%, #132433 100%);
+            min-height: 100vh;
+            padding: 1.5rem;
+        }
+
+        .dashboard {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 1.5rem;
+        }
+
+        /* Cartes */
+        .card {
+            background: rgba(20, 35, 50, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(74, 144, 196, 0.2);
+            border-radius: 2rem;
+            padding: 1.5rem;
+            box-shadow: 0 25px 50px -10px rgba(0, 0, 0, 0.5);
+            margin-bottom: 1.5rem;
+        }
+
+        /* En-tête */
+        .header {
+            grid-column: 1 / -1;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .flag-om {
+            width: 50px;
+            height: 34px;
+            background: linear-gradient(135deg, #ce1126 0%, #ce1126 40%, #ffffff 40%, #ffffff 60%, #006647 60%, #006647 100%);
+            border-radius: 8px;
+            box-shadow: 0 0 0 2px rgba(255,255,255,0.1);
+            position: relative;
+        }
+        .flag-om::after {
+            content: "⚔️";
+            position: absolute;
+            left: 5px;
+            top: 5px;
+            font-size: 16px;
+        }
+
+        .title {
+            color: white;
+            font-weight: 600;
+            font-size: 2rem;
+            letter-spacing: -0.5px;
+        }
+        .title span {
+            background: linear-gradient(145deg, #00e5b0, #0096b0);
+            color: white;
+            padding: 0.2rem 1.2rem;
+            border-radius: 40px;
+            font-size: 1rem;
+            margin-left: 1rem;
+        }
+
+        /* Compteur API */
+        .api-counter {
+            background: #1e3f5a;
+            color: #7fc9ff;
+            padding: 0.5rem 1.5rem;
+            border-radius: 40px;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            border: 1px solid #3f8bbf;
+        }
+        .api-number {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #00e5b0;
+        }
+
+        /* Proxy grid */
+        .proxy-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .proxy-field {
+            background: #0e1f2f;
+            border-radius: 1.5rem;
+            padding: 1rem;
+            border: 1px solid #2e5570;
+        }
+        .proxy-field .label {
+            color: #8bb5d9;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .proxy-field .value {
+            color: white;
+            font-family: 'Fira Code', monospace;
+            font-size: 1.2rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .proxy-field .value i {
+            color: #4fc3dc;
+            cursor: pointer;
+            padding: 0.3rem;
+            border-radius: 50%;
+            transition: 0.2s;
+        }
+        .proxy-field .value i:hover {
+            background: #1e4b68;
+            color: white;
+        }
+
+        /* Bouton changer - 1 seul appel */
+        .btn-change {
+            background: linear-gradient(145deg, #00c9a7, #0096b0);
+            border: none;
+            padding: 1rem 2.5rem;
+            border-radius: 60px;
+            color: white;
+            font-weight: 700;
+            font-size: 1.3rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 1rem;
+            cursor: pointer;
+            transition: 0.2s;
+            border: 1px solid rgba(255,255,255,0.2);
+            margin-right: 1rem;
+        }
+        .btn-change:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 30px -10px #00c9a7;
+        }
+        .btn-change:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* IP Checker simplifié */
+        .ip-checker {
+            background: #0a1f30;
+            border-radius: 1.5rem;
+            padding: 1.5rem;
+            border: 1px solid #2e6190;
+        }
+        .ip-main {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+        .ip-address {
+            font-size: 2rem;
+            font-family: monospace;
+            color: white;
+            background: #0a1a28;
+            padding: 0.5rem 1.5rem;
+            border-radius: 60px;
+            border: 1px solid #3f8bbf;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .isp-info {
+            color: #a3c9ff;
+            font-size: 1.1rem;
+        }
+        .badge-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 0.5rem 1.2rem;
+            border-radius: 40px;
+            background: #1d3e53;
+        }
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+        .dot.fresh { background: #26e6a4; box-shadow: 0 0 10px #26e6a4; }
+        .dot.slow { background: #f5b342; }
+        .dot.bad { background: #ff7b7b; }
+
+        /* Statistiques */
+        .stats-row {
+            display: flex;
+            gap: 2rem;
+            margin: 1rem 0;
+            color: white;
+        }
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #00e5b0;
+        }
+
+        /* Historique */
+        .history-section {
+            background: rgba(10, 30, 45, 0.8);
+            border-radius: 2rem;
+            padding: 1.5rem;
+        }
+        .history-list {
+            max-height: 450px;
+            overflow-y: auto;
+            margin-top: 1rem;
+        }
+        .history-item {
+            background: #0a2338;
+            border-radius: 1rem;
+            padding: 0.8rem 1rem;
+            margin-bottom: 0.5rem;
+            border-left: 4px solid #00c9a7;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+        }
+        .history-item:hover {
+            background: #124a6b;
+        }
+        .history-host {
+            font-family: monospace;
+            font-weight: 600;
+            color: white;
+        }
+        .history-time {
+            color: #95c0e6;
+            font-size: 0.8rem;
+        }
+        .history-actions button {
+            background: #1e4b6e;
+            border: none;
+            color: white;
+            padding: 0.2rem 0.8rem;
+            border-radius: 20px;
+            cursor: pointer;
+            margin-left: 0.3rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <!-- Header avec compteur API -->
+        <div class="header">
+            <div class="header-left">
+                <div class="flag-om"></div>
+                <div class="title">Proxy Oman <span>1 clic = 1 proxy</span></div>
+            </div>
+            <div class="api-counter">
+                <i class="fas fa-plug"></i>
+                <span>Appels API aujourd'hui :</span>
+                <span class="api-number" id="apiCount">0</span>
+            </div>
+        </div>
+
+        <!-- Colonne gauche : Proxy actuel -->
+        <div class="left-col">
+            <div class="card">
+                <h3 style="color: white; margin-bottom: 1rem;">
+                    <i class="fas fa-shield-alt" style="color: #00e5b0;"></i> Proxy Actif
+                </h3>
+                
+                <!-- Affichage proxy -->
+                <div class="proxy-grid" id="proxyGrid">
+                    <!-- Rempli par JS -->
+                </div>
+
+                <!-- Bouton unique -->
+                <div style="display: flex; align-items: center; gap: 1rem;">
+                    <button class="btn-change" id="changeProxyBtn">
+                        <i class="fas fa-sync-alt"></i> Changer proxy (1 appel)
+                    </button>
+                    <span style="color: #7fc9ff;" id="changeStatus"></span>
+                </div>
+
+                <!-- IP Checker -->
+                <div class="ip-checker" style="margin-top: 1.5rem;">
+                    <div class="ip-main">
+                        <div class="ip-address">
+                            <span id="ipText">--.--.--.--</span>
+                            <i class="far fa-copy" id="copyIpIcon" style="cursor: pointer;"></i>
+                        </div>
+                        <div class="isp-info">
+                            <i class="fas fa-network-wired"></i>
+                            <span id="ispText">Analyse...</span>
+                        </div>
+                        <div class="badge-status">
+                            <span class="dot" id="statusDot"></span>
+                            <span id="statusText">Attente</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Stats rapides -->
+                    <div class="stats-row">
+                        <div class="stat-item">
+                            <i class="fas fa-bolt"></i>
+                            <span>Latence: <span class="stat-value" id="latencyValue">---</span> ms</span>
+                        </div>
+                        <div class="stat-item">
+                            <i class="fas fa-clock"></i>
+                            <span>Dernier: <span id="lastCheckTime">---</span></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Colonne droite : Historique -->
+        <div class="right-col">
+            <div class="history-section">
+                <h3 style="color: white; display: flex; align-items: center; gap: 10px;">
+                    <i class="fas fa-history" style="color: #00e5b0;"></i> Historique (aujourd'hui)
+                    <span style="background: #1e3f5a; padding: 0.2rem 0.8rem; border-radius: 20px; font-size: 0.8rem;" id="historyCount">0</span>
+                </h3>
+
+                <!-- Statistiques historiques -->
+                <div style="display: flex; gap: 1rem; margin: 1rem 0; color: #a3c9ff;">
+                    <span><i class="fas fa-chart-line"></i> Moyenne: <span id="avgLatency">0</span>ms</span>
+                    <span><i class="fas fa-check-circle"></i> Rapides: <span id="fastCount">0</span></span>
+                </div>
+
+                <!-- Liste historique -->
+                <div class="history-list" id="historyList">
+                    <!-- Les entrées historiques apparaîtront ici -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            // Configuration - UN SEUL PROXY PAR APPEL
+            const API_URL = 'https://ipapi.novproxy.com/novapi?user=nl8hehx38g8hbwdfdaz3&port=443&count=1&region=OM&st=&type=2';
+            
+            // État
+            let currentProxy = null;
+            let history = [];
+            let apiCallCount = parseInt(localStorage.getItem('apiCount') || '0');
+            let lastCallDate = localStorage.getItem('lastCallDate') || '';
+            
+            // Réinitialiser le compteur si nouveau jour
+            const today = new Date().toDateString();
+            if (lastCallDate !== today) {
+                apiCallCount = 0;
+                localStorage.setItem('lastCallDate', today);
+            }
+            
+            // Éléments DOM
+            const proxyGrid = document.getElementById('proxyGrid');
+            const changeBtn = document.getElementById('changeProxyBtn');
+            const changeStatus = document.getElementById('changeStatus');
+            const ipSpan = document.getElementById('ipText');
+            const copyIpIcon = document.getElementById('copyIpIcon');
+            const statusDot = document.getElementById('statusDot');
+            const statusText = document.getElementById('statusText');
+            const latencySpan = document.getElementById('latencyValue');
+            const lastCheckSpan = document.getElementById('lastCheckTime');
+            const ispSpan = document.getElementById('ispText');
+            const apiCountSpan = document.getElementById('apiCount');
+            const historyList = document.getElementById('historyList');
+            const historyCountSpan = document.getElementById('historyCount');
+            const avgLatencySpan = document.getElementById('avgLatency');
+            const fastCountSpan = document.getElementById('fastCount');
+
+            // Mettre à jour l'affichage du compteur API
+            function updateApiCounter() {
+                apiCountSpan.innerText = apiCallCount;
+                localStorage.setItem('apiCount', apiCallCount);
+            }
+            updateApiCounter();
+
+            // Parser la réponse API
+            function parseProxyResponse(text) {
+                const parts = text.trim().split(':');
+                if (parts.length >= 4) {
+                    return {
+                        host: parts[0],
+                        port: parts[1],
+                        username: parts[2],
+                        password: parts[3],
+                        full: text.trim(),
+                        timestamp: new Date().toLocaleTimeString('fr-FR'),
+                        fullDate: new Date()
+                    };
+                }
+                return null;
+            }
+
+            // Récupérer l'IP publique et la latence - UN SEUL APPEL EXTERNE
+            async function checkPublicIP() {
+                const start = performance.now();
+                try {
+                    // Un seul appel pour l'IP
+                    const response = await fetch('https://api.ipify.org?format=json', { 
+                        cache: 'no-cache',
+                        mode: 'cors'
+                    });
+                    const data = await response.json();
+                    const end = performance.now();
+                    const latency = Math.round(end - start);
+                    
+                    ipSpan.innerText = data.ip;
+                    latencySpan.innerText = latency;
+                    lastCheckSpan.innerText = new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+                    
+                    // Qualifier la connexion
+                    if (latency < 400) {
+                        statusDot.className = 'dot fresh';
+                        statusText.innerText = 'FRAÎCHE';
+                    } else if (latency < 800) {
+                        statusDot.className = 'dot slow';
+                        statusText.innerText = 'MOYENNE';
+                    } else {
+                        statusDot.className = 'dot bad';
+                        statusText.innerText = 'LENTE';
+                    }
+                    
+                    // Récupérer ISP (optionnel, appel séparé mais pas bloquant)
+                    fetch('https://ipapi.co/json/')
+                        .then(res => res.json())
+                        .then(data => {
+                            ispSpan.innerText = data.org || data.isp || 'Inconnu';
+                        })
+                        .catch(() => ispSpan.innerText = 'Non disponible');
+                    
+                    return latency;
+                } catch (error) {
+                    ipSpan.innerText = '--.--.--.--';
+                    statusText.innerText = 'ÉCHEC';
+                    latencySpan.innerText = '---';
+                    return null;
+                }
+            }
+
+            // Ajouter à l'historique
+            function addToHistory(proxy, latency) {
+                if (!proxy || !proxy.host) return;
+                
+                const entry = {
+                    ...proxy,
+                    latency: latency || 'N/A',
+                    quality: latency && latency < 400 ? 'fast' : (latency && latency < 800 ? 'medium' : 'slow'),
+                    time: new Date().toLocaleTimeString('fr-FR')
+                };
+                
+                history.unshift(entry);
+                if (history.length > 20) history.pop();
+                
+                updateHistoryDisplay();
+            }
+
+            // Mettre à jour l'historique
+            function updateHistoryDisplay() {
+                if (history.length === 0) {
+                    historyList.innerHTML = '<div style="color: #4f718b; text-align: center; padding: 1rem;">Aucun proxy utilisé aujourd\'hui</div>';
+                    historyCountSpan.innerText = '0';
+                    avgLatencySpan.innerText = '0';
+                    fastCountSpan.innerText = '0';
+                    return;
+                }
+                
+                let html = '';
+                let totalLatency = 0;
+                let latencyCount = 0;
+                let fastCount = 0;
+                
+                history.forEach((proxy, index) => {
+                    // Calculer stats
+                    if (proxy.latency !== 'N/A') {
+                        totalLatency += proxy.latency;
+                        latencyCount++;
+                        if (proxy.latency < 400) fastCount++;
+                    }
+                    
+                    const latencyColor = proxy.latency < 400 ? '#26e6a4' : (proxy.latency < 800 ? '#f5b342' : '#ff7b7b');
+                    
+                    html += `
+                        <div class="history-item" onclick="useOldProxy(${index})">
+                            <div>
+                                <span class="history-host">${proxy.host}:${proxy.port}</span>
+                                <span style="margin-left: 1rem; color: ${latencyColor};">
+                                    <i class="fas fa-bolt"></i> ${proxy.latency}ms
+                                </span>
+                            </div>
+                            <div>
+                                <span class="history-time"><i class="far fa-clock"></i> ${proxy.time}</span>
+                                <span class="history-actions">
+                                    <button onclick="event.stopPropagation(); copyProxy('${proxy.full}')">
+                                        <i class="far fa-copy"></i>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                historyList.innerHTML = html;
+                historyCountSpan.innerText = history.length;
+                
+                const avgLatency = latencyCount > 0 ? Math.round(totalLatency / latencyCount) : 0;
+                avgLatencySpan.innerText = avgLatency;
+                fastCountSpan.innerText = fastCount;
+            }
+
+            // Rendre disponible globalement
+            window.copyProxy = function(full) {
+                navigator.clipboard.writeText(full);
+            };
+
+            window.useOldProxy = function(index) {
+                if (history[index]) {
+                    currentProxy = {...history[index]};
+                    renderProxyData(currentProxy);
+                    checkPublicIP().then(latency => {
+                        // Mettre à jour l'entrée historique avec la nouvelle latence
+                        history[index].latency = latency;
+                        updateHistoryDisplay();
+                    });
+                }
+            };
+
+            // Afficher proxy dans la grille
+            function renderProxyData(data) {
+                const items = [
+                    { label: 'HOST', value: data.host, icon: 'fa-server' },
+                    { label: 'PORT', value: data.port, icon: 'fa-plug' },
+                    { label: 'USERNAME', value: data.username, icon: 'fa-user' },
+                    { label: 'PASSWORD', value: data.password, icon: 'fa-lock' }
+                ];
+
+                let html = '';
+                items.forEach(item => {
+                    html += `
+                        <div class="proxy-field">
+                            <div class="label"><i class="fas ${item.icon}"></i> ${item.label}</div>
+                            <div class="value">
+                                <span>${item.value || '---'}</span>
+                                <i class="far fa-copy copy-item" data-copy="${item.value || ''}"></i>
+                            </div>
+                        </div>
+                    `;
+                });
+                proxyGrid.innerHTML = html;
+
+                // Gestionnaires copie
+                document.querySelectorAll('.copy-item').forEach(icon => {
+                    icon.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        const text = icon.getAttribute('data-copy');
+                        if (text && text !== '---') {
+                            navigator.clipboard.writeText(text);
+                        }
+                    });
+                });
+            }
+
+            // Charger NOUVEAU proxy - UN SEUL APPEL API
+            async function fetchNewProxy() {
+                // Désactiver le bouton pendant l'appel
+                changeBtn.disabled = true;
+                changeStatus.innerText = 'Chargement...';
+                
+                try {
+                    // UN SEUL APPEL API ICI
+                    const response = await fetch(API_URL);
+                    const text = await response.text();
+                    
+                    // Incrémenter le compteur APRÈS l'appel réussi
+                    apiCallCount++;
+                    updateApiCounter();
+                    
+                    const parsed = parseProxyResponse(text);
+                    if (parsed) {
+                        // Sauvegarder l'ancien proxy dans l'historique
+                        if (currentProxy) {
+                            const oldLatency = latencySpan.innerText !== '---' ? parseInt(latencySpan.innerText) : null;
+                            addToHistory(currentProxy, oldLatency);
+                        }
+                        
+                        // Mettre à jour avec le nouveau
+                        currentProxy = parsed;
+                        renderProxyData(parsed);
+                        
+                        // Vérifier l'IP avec ce nouveau proxy
+                        const latency = await checkPublicIP();
+                        
+                        // Ajouter le nouveau à l'historique avec sa latence
+                        addToHistory(parsed, latency);
+                        
+                        changeStatus.innerText = '✓ Proxy chargé';
+                    } else {
+                        changeStatus.innerText = '✗ Erreur format';
+                    }
+                } catch (err) {
+                    console.error('Erreur:', err);
+                    changeStatus.innerText = '✗ Échec appel API';
+                } finally {
+                    // Réactiver le bouton
+                    changeBtn.disabled = false;
+                    setTimeout(() => {
+                        changeStatus.innerText = '';
+                    }, 2000);
+                }
+            }
+
+            // Copier IP
+            copyIpIcon.addEventListener('click', () => {
+                const ip = ipSpan.innerText;
+                if (ip && ip !== '--.--.--.--') {
+                    navigator.clipboard.writeText(ip);
+                }
+            });
+
+            // Bouton changer
+            changeBtn.addEventListener('click', fetchNewProxy);
+
+            // Initialisation : charger le PREMIER proxy (1 seul appel)
+            fetchNewProxy();
+        })();
+    </script>
+</body>
+</html>
